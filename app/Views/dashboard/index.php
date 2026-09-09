@@ -27,7 +27,6 @@ $username = $_SESSION['username'] ?? 'admin';
                 <hr>
 
                 <h5 class="mb-3 text-center">Menu:</h5>
-                <!-- Ditambahkan justify-content-center agar tombol berada di tengah -->
                 <div class="d-flex justify-content-center gap-2">
                     <a href="/si-akademik/public/mahasiswa" class="btn btn-primary">Mahasiswa</a>
                     <a href="/si-akademik/public/dosen" class="btn btn-secondary">Dosen</a>
