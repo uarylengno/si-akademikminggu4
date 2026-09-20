@@ -1,53 +1,34 @@
 <?php
 namespace App\Models;
 
+use PDO;
+
 class Mahasiswa
 {
+    private $pdo;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
     public function getAll()
     {
-        return [
-            [
-                'nim' => '23001',
-                'nama' => 'Andi',
-                'prodi' => 'Teknik Informatika'
-            ],
-            [
-                'nim' => '23002',
-                'nama' => 'Budi',
-                'prodi' => 'Teknik Informatika'
-            ],
-            [
-                'nim' => '23003',
-                'nama' => 'Citra',
-                'prodi' => 'Teknik Informatika'
-            ],
-            [
-                'nim' => '23004',
-                'nama' => 'Rozi',
-                'prodi' => 'Teknik Informatika'
-            ],
-            [
-                'nim' => '23005',
-                'nama' => 'Alex',
-                'prodi' => 'Teknik Informatika'
-            ],
-            [
-                'nim' => '23006',
-                'nama' => 'Ello',
-                'prodi' => 'Teknik Informatika'
-            ]
-        ];
+        $sql = "SELECT mahasiswa.*, dosen.nama AS nama_dosen 
+                FROM mahasiswa 
+                LEFT JOIN dosen ON mahasiswa.dosen_id = dosen.id 
+                ORDER BY mahasiswa.nama ASC";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getByNim($nim)
     {
-        $mahasiswa = $this->getAll();
-
-        foreach ($mahasiswa as $mhs) {
-            if ($mhs['nim'] === $nim) {
-                return $mhs;
-            }
-        }
-        return null;
+        $sql = "SELECT mahasiswa.*, dosen.nama AS nama_dosen, dosen.nidn, dosen.bidang_keahlian 
+                FROM mahasiswa 
+                LEFT JOIN dosen ON mahasiswa.dosen_id = dosen.id 
+                WHERE mahasiswa.nim = :nim";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['nim' => $nim]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

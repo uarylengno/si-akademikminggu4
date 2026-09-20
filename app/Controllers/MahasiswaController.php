@@ -5,17 +5,21 @@ use App\Models\Mahasiswa;
 
 class MahasiswaController
 {
+    // Menampilkan daftar seluruh mahasiswa
     public function index()
     {
-        $Model = new Mahasiswa();
-        $mahasiswa = $Model->getAll();
+        global $pdo; 
+        $model = new Mahasiswa($pdo); 
+        $mahasiswa = $model->getAll();
         require_once __DIR__ . '/../Views/mahasiswa/index.php';
     }
 
+    // [TAMBAHAN BARU] Menampilkan halaman detail mahasiswa berdasarkan NIM
     public function detail()
     {
-        $model = new Mahasiswa();
-        $nim = $_GET['nim'] ?? null;
+        global $pdo;
+        $model = new Mahasiswa($pdo);
+        $nim = $_GET['nim'] ?? '';
         $mahasiswa = $model->getByNim($nim);
         require_once __DIR__ . '/../Views/mahasiswa/detail.php';
     }

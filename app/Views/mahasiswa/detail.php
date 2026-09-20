@@ -12,23 +12,33 @@
         <div class="card shadow">
             <div class="card-body">
                 <h2 class="card-title mb-4">Detail Mahasiswa</h2>
-                <table class="table table-bordered">
-                    <tr>
-                        <th width="200">NIM</th>
-                        <td><?= $mahasiswa['nim'] ?></td>
-                    </tr>
-                    <tr>
-                        <th>Nama</th>
-                        <td><?= $mahasiswa['nama'] ?></td>
-                    </tr>
-                    <tr>
-                        <th>Program Studi</th>
-                        <td><?= $mahasiswa['prodi'] ?></td>
-                    </tr>
-                </table>
-            
+                <?php if ($mahasiswa): ?>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="200">NIM</th>
+                            <td><?= htmlspecialchars($mahasiswa['nim']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Nama</th>
+                            <td><?= htmlspecialchars($mahasiswa['nama']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Program Studi</th>
+                            <td><?= htmlspecialchars($mahasiswa['prodi']) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Dosen Pembimbing</th>
+                            <td>
+                                <?= htmlspecialchars($mahasiswa['nama_dosen'] ?? 'Belum ada dosen pembimbing') ?>
+                            </td>
+                        </tr>
+                    </table>
+                <?php else: ?>
+                    <div class="alert alert-danger">Data mahasiswa tidak ditemukan.</div>
+                <?php endif; ?>
+                
                 <div class="d-flex justify-content-end mt-3">
-                    <a href="?url=mahasiswa" class="btn btn-secondary">Kembali</a>
+                    <a href="/si-akademik/public/mahasiswa" class="btn btn-secondary">Kembali</a>
                 </div>
             </div>
         </div>

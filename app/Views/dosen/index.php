@@ -13,7 +13,11 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="card-title mb-0">DATA DOSEN</h2>
-                <a href="/si-akademik/public/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+                <div>
+                 
+                    <a href="/si-akademik/public/dosen/create" class="btn btn-success me-2">Tambah Dosen</a>
+                    <a href="/si-akademik/public/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+                </div>
             </div>
             
             <table class="table table-bordered table-striped">
@@ -32,7 +36,10 @@
                         <td><?= htmlspecialchars($d['nama']) ?></td>
                         <td><?= htmlspecialchars($d['bidang_keahlian']) ?></td>
                         <td>
-                            <a href="/si-akademik/public/dosen/detail?nidn=<?= $d['nidn']; ?>" class="btn btn-primary btn-sm">Detail</a>
+
+                            <a href="/si-akademik/public/dosen/detail?nidn=<?= $d['nidn']; ?>" class="btn btn-info btn-sm">Detail</a>
+                            <a href="/si-akademik/public/dosen/edit?id=<?= $d['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/si-akademik/public/dosen/delete?id=<?= $d['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data dosen ini?')">Hapus</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>

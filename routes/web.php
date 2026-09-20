@@ -51,6 +51,46 @@ if ($url === 'mahasiswa') {
     $controller->index();
     exit;
 }
+if ($url === 'dosen/create') {
+    AuthMiddleware::handle();
+    $controller = new DosenController();
+    $controller->create();
+    exit;
+}
+
+if ($url === 'dosen/store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    AuthMiddleware::handle();
+    $controller = new DosenController();
+    $controller->store();
+    exit;
+}
+
+if ($url === 'dosen/edit' && isset($_GET['id'])) {
+    AuthMiddleware::handle();
+    $controller = new DosenController();
+    $controller->edit($_GET['id']);
+    exit;
+}
+
+if ($url === 'dosen/update' && isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    AuthMiddleware::handle();
+    $controller = new DosenController();
+    $controller->update($_GET['id']);
+    exit;
+}
+
+if ($url === 'dosen/delete' && isset($_GET['id'])) {
+    AuthMiddleware::handle();
+    $controller = new DosenController();
+    $controller->delete($_GET['id']);
+    exit;
+}
+if ($url === 'mahasiswa/detail' && isset($_GET['nim'])) {
+    AuthMiddleware::handle();
+    $controller = new MahasiswaController();
+    $controller->detail();
+    exit;
+}
 
 echo "<h1>Error 404 - Halaman Tidak Ditemukan</h1>";
 echo "<p>URL yang kamu minta: <strong>" . htmlspecialchars($url) . "</strong> belum terdaftar di routes/web.php</p>";
