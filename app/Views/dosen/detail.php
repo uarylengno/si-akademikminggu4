@@ -16,15 +16,15 @@
                     <table class="table table-bordered">
                         <tr>
                             <th width="200">NIDN</th>
-                            <td><?= $dosen['nidn'] ?></td>
+                            <td><?= htmlspecialchars($dosen['nidn']) ?></td>
                         </tr>
                         <tr>
                             <th>Nama</th>
-                            <td><?= $dosen['nama'] ?></td>
+                            <td><?= htmlspecialchars($dosen['nama']) ?></td>
                         </tr>
                         <tr>
-                            <th>Program Studi</th>
-                            <td><?= $dosen['prodi'] ?></td>
+                            <th>Bidang Keahlian</th>
+                            <td><?= htmlspecialchars($dosen['bidang_keahlian']) ?></td>
                         </tr>
                     </table>
                 <?php else: ?>

@@ -1,22 +1,25 @@
 <?php
 namespace App\Models;
 
-class Dosen {
-    public function getAllDosen() {
-        return [
-            ['nidn' => '001', 'nama' => 'Ahmad', 'prodi' => 'Teknik Informatika'],
-            ['nidn' => '002', 'nama' => 'Siti', 'prodi' => 'Sistem Informasi'],
-            ['nidn' => '003', 'nama' => 'Budi', 'prodi' => 'Teknik Informatika'],
-        ];
+class Dosen
+{
+    private $pdo;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
     }
 
-    public function getByNidn($nidn) {
-        $dosenList = $this->getAllDosen();
-        foreach ($dosenList as $d) {
-            if ($d['nidn'] === $nidn) {
-                return $d;
-            }
-        }
-        return null;
+    public function getAll()
+    {
+        $stmt = $this->pdo->query("SELECT * FROM dosen ORDER BY nama ASC");
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getByNidn($nidn)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM dosen WHERE nidn = :nidn");
+        $stmt->execute(['nidn' => $nidn]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 }

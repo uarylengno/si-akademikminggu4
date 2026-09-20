@@ -1,38 +1,57 @@
 <?php
+use App\Middleware\AuthMiddleware;
+use App\Controllers\DosenController;
 use App\Controllers\AuthController;
 use App\Controllers\MahasiswaController;
-use App\Controllers\DosenController;
-use App\Middleware\AuthMiddleware;
 
 $url = $_GET['url'] ?? '';
+$url = rtrim($url, '/');
 
-$authController = new AuthController();
-$mhsController = new MahasiswaController();
-$dosenController = new DosenController();
-$authMiddleware = new AuthMiddleware();
-
-if ($url === 'login') {
-    $authController->login();
-} elseif ($url === 'login/process') {
-    $authController->processLogin();
-} elseif ($url === 'logout') {
-    $authController->logout();
-} elseif ($url === 'dashboard') {
-    $authMiddleware->handle();
-    require_once __DIR__ . '/../app/Views/dashboard/index.php';
-} elseif ($url === 'mahasiswa') {
-    $authMiddleware->handle();
-    $mhsController->index();
-} elseif ($url === 'mahasiswa/detail') {
-    $authMiddleware->handle();
-    $mhsController->detail();
-} elseif ($url === 'dosen') {
-    $authMiddleware->handle();
-    $dosenController->index();
-} elseif ($url === 'dosen/detail') { 
-    $authMiddleware->handle();
-    $dosenController->detail();
-} else {
-    http_response_code(404);
-    echo "404 Not Found";
+if ($url === 'auth/login' || $url === 'login' || $url === '') {
+    $controller = new AuthController();
+    $controller->login();
+    exit;
 }
+
+if ($url === 'login/process') {
+    $controller = new AuthController();
+    $controller->processLogin();
+    exit;
+}
+
+if ($url === 'logout') {
+    $controller = new AuthController();
+    $controller->logout();
+    exit;
+}
+
+if ($url === 'dashboard') {
+    AuthMiddleware::handle();
+    require_once __DIR__ . '/../app/Views/dashboard/index.php';
+    exit;
+}
+
+if ($url === 'dosen/detail') {
+    AuthMiddleware::handle();
+    $controller = new DosenController();
+    $controller->detail();
+    exit;
+}
+
+if ($url === 'dosen') {
+    AuthMiddleware::handle();
+    $controller = new DosenController();
+    $controller->index();
+    exit;
+}
+
+if ($url === 'mahasiswa') {
+    AuthMiddleware::handle();
+    $controller = new MahasiswaController();
+    $controller->index();
+    exit;
+}
+
+echo "<h1>Error 404 - Halaman Tidak Ditemukan</h1>";
+echo "<p>URL yang kamu minta: <strong>" . htmlspecialchars($url) . "</strong> belum terdaftar di routes/web.php</p>";
+exit;

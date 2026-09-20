@@ -3,11 +3,16 @@ namespace App\Controllers;
 
 class AuthController {
     public function login() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         require_once __DIR__ . '/../Views/auth/login.php';
     }
 
     public function processLogin() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
 
@@ -23,10 +28,12 @@ class AuthController {
     }
 
     public function logout() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         session_unset();
         session_destroy();
-        header('Location: /si-akademik/public/login');
+        header('Location: /si-akademik/public/auth/login');
         exit;
     }
 }
