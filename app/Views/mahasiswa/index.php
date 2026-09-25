@@ -13,9 +13,12 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="card-title mb-0">DATA MAHASISWA</h2>
-                <a href="/si-akademik/public/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+                <div class="d-flex gap-2">
+                    <a href="/si-akademik/public/mahasiswa/create" class="btn btn-success">+ Tambah Mahasiswa</a>
+                    <a href="/si-akademik/public/dashboard" class="btn btn-secondary">Kembali ke Dashboard</a>
+                </div>
             </div>
-            
+
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
                     <tr>
@@ -29,12 +32,14 @@
                 <tbody>
                     <?php foreach ($mahasiswa as $m): ?>
                     <tr>
-                        <td><?= htmlspecialchars($m['nim']) ?></td>
-                        <td><?= htmlspecialchars($m['nama']) ?></td>
-                        <td><?= htmlspecialchars($m['prodi']) ?></td>
-                        <td><?= htmlspecialchars($m['nama_dosen'] ?? 'Belum ada') ?></td>
-                        <td>
-                            <a href="/si-akademik/public/mahasiswa/detail?nim=<?= $m['nim']; ?>" class="btn btn-info btn-sm">Detail</a>
+                        <td><?= htmlspecialchars($m->getNim()) ?></td>
+                        <td><?= htmlspecialchars($m->getNama()) ?></td>
+                        <td><?= htmlspecialchars($m->getProdi()) ?></td>
+                        <td><?= htmlspecialchars($m->getNamaDosen() ?? 'Belum ada') ?></td>
+                        <td class="d-flex gap-1">
+                            <a href="/si-akademik/public/mahasiswa/detail?nim=<?= $m->getNim() ?>" class="btn btn-info btn-sm">Detail</a>
+                            <a href="/si-akademik/public/mahasiswa/edit?id=<?= $m->getId() ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/si-akademik/public/mahasiswa/delete?id=<?= $m->getId() ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus data ini?')">Hapus</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>

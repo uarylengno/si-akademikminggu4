@@ -1,4 +1,6 @@
 <?php
+use App\Config\Database;
+use App\Repositories\MahasiswaRepository;
 use App\Middleware\AuthMiddleware;
 use App\Controllers\DosenController;
 use App\Controllers\AuthController;
@@ -6,6 +8,9 @@ use App\Controllers\MahasiswaController;
 
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
+
+$database = Database::getInstance();
+$mahasiswaRepo = new MahasiswaRepository($database);
 
 if ($url === 'auth/login' || $url === 'login' || $url === '') {
     $controller = new AuthController();
@@ -47,10 +52,46 @@ if ($url === 'dosen') {
 
 if ($url === 'mahasiswa') {
     AuthMiddleware::handle();
-    $controller = new MahasiswaController();
+    $controller = new MahasiswaController($mahasiswaRepo);
     $controller->index();
     exit;
 }
+
+if ($url === 'mahasiswa/create') {
+    AuthMiddleware::handle();
+    $controller = new MahasiswaController($mahasiswaRepo);
+    $controller->create();
+    exit;
+}
+
+if ($url === 'mahasiswa/store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    AuthMiddleware::handle();
+    $controller = new MahasiswaController($mahasiswaRepo);
+    $controller->store();
+    exit;
+}
+
+if ($url === 'mahasiswa/edit' && isset($_GET['id'])) {
+    AuthMiddleware::handle();
+    $controller = new MahasiswaController($mahasiswaRepo);
+    $controller->edit($_GET['id']);
+    exit;
+}
+
+if ($url === 'mahasiswa/update' && isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    AuthMiddleware::handle();
+    $controller = new MahasiswaController($mahasiswaRepo);
+    $controller->update($_GET['id']);
+    exit;
+}
+
+if ($url === 'mahasiswa/delete' && isset($_GET['id'])) {
+    AuthMiddleware::handle();
+    $controller = new MahasiswaController($mahasiswaRepo);
+    $controller->destroy($_GET['id']);
+    exit;
+}
+
 if ($url === 'dosen/create') {
     AuthMiddleware::handle();
     $controller = new DosenController();
@@ -85,9 +126,10 @@ if ($url === 'dosen/delete' && isset($_GET['id'])) {
     $controller->delete($_GET['id']);
     exit;
 }
+
 if ($url === 'mahasiswa/detail' && isset($_GET['nim'])) {
     AuthMiddleware::handle();
-    $controller = new MahasiswaController();
+    $controller = new MahasiswaController($mahasiswaRepo);
     $controller->detail();
     exit;
 }

@@ -16,20 +16,20 @@
                     <table class="table table-bordered">
                         <tr>
                             <th width="200">NIM</th>
-                            <td><?= htmlspecialchars($mahasiswa['nim']) ?></td>
+                            <td><?= htmlspecialchars($mahasiswa->getNim()) ?></td>
                         </tr>
                         <tr>
                             <th>Nama</th>
-                            <td><?= htmlspecialchars($mahasiswa['nama']) ?></td>
+                            <td><?= htmlspecialchars($mahasiswa->getNama()) ?></td>
                         </tr>
                         <tr>
                             <th>Program Studi</th>
-                            <td><?= htmlspecialchars($mahasiswa['prodi']) ?></td>
+                            <td><?= htmlspecialchars($mahasiswa->getProdi()) ?></td>
                         </tr>
                         <tr>
                             <th>Dosen Pembimbing</th>
                             <td>
-                                <?= htmlspecialchars($mahasiswa['nama_dosen'] ?? 'Belum ada dosen pembimbing') ?>
+                                <?= htmlspecialchars($mahasiswa->getNamaDosen() ?? 'Belum ada dosen pembimbing') ?>
                             </td>
                         </tr>
                     </table>
