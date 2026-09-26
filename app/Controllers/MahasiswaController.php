@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Repositories\MahasiswaRepository;
 use App\Models\Mahasiswa;
 
-class MahasiswaController
+class MahasiswaController extends BaseController
 {
     private MahasiswaRepository $repo;
 
@@ -14,26 +14,26 @@ class MahasiswaController
         $this->repo = $repo;
     }
 
-    public function index()
+    public function index(): void
     {
         $mahasiswa = $this->repo->getAll();
-        require_once __DIR__ . '/../Views/mahasiswa/index.php';
+        $this->view('mahasiswa/index', ['mahasiswa' => $mahasiswa]);
     }
 
-    public function detail()
+    public function detail(): void
     {
         $nim = $_GET['nim'] ?? '';
         $mahasiswa = $this->repo->getByNim($nim);
-        require_once __DIR__ . '/../Views/mahasiswa/detail.php';
+        $this->view('mahasiswa/detail', ['mahasiswa' => $mahasiswa]);
     }
 
-    public function create()
+    public function create(): void
     {
         $dosenList = $this->repo->getAllDosen();
-        require_once __DIR__ . '/../Views/mahasiswa/create.php';
+        $this->view('mahasiswa/create', ['dosenList' => $dosenList]);
     }
 
-    public function store()
+    public function store(): void
     {
         try {
             $mhs = new Mahasiswa(
@@ -43,23 +43,27 @@ class MahasiswaController
                 !empty($_POST['dosen_id']) ? (int) $_POST['dosen_id'] : null
             );
             $this->repo->create($mhs);
-            header('Location: /si-akademik/public/mahasiswa');
-            exit;
+            $this->redirect('/si-akademik/public/mahasiswa');
         } catch (\InvalidArgumentException $e) {
-            $error = $e->getMessage();
             $dosenList = $this->repo->getAllDosen();
-            require_once __DIR__ . '/../Views/mahasiswa/create.php';
+            $this->view('mahasiswa/create', [
+                'error' => $e->getMessage(),
+                'dosenList' => $dosenList,
+            ]);
         }
     }
 
-    public function edit($id)
+    public function edit($id): void
     {
         $mahasiswa = $this->repo->find((int) $id);
         $dosenList = $this->repo->getAllDosen();
-        require_once __DIR__ . '/../Views/mahasiswa/edit.php';
+        $this->view('mahasiswa/edit', [
+            'mahasiswa' => $mahasiswa,
+            'dosenList' => $dosenList,
+        ]);
     }
 
-    public function update($id)
+    public function update($id): void
     {
         try {
             $mhs = new Mahasiswa(
@@ -70,20 +74,21 @@ class MahasiswaController
                 (int) $id
             );
             $this->repo->update($mhs);
-            header('Location: /si-akademik/public/mahasiswa');
-            exit;
+            $this->redirect('/si-akademik/public/mahasiswa');
         } catch (\InvalidArgumentException $e) {
-            $error = $e->getMessage();
             $mahasiswa = $this->repo->find((int) $id);
             $dosenList = $this->repo->getAllDosen();
-            require_once __DIR__ . '/../Views/mahasiswa/edit.php';
+            $this->view('mahasiswa/edit', [
+                'error' => $e->getMessage(),
+                'mahasiswa' => $mahasiswa,
+                'dosenList' => $dosenList,
+            ]);
         }
     }
 
-    public function destroy($id)
+    public function destroy($id): void
     {
         $this->repo->delete((int) $id);
-        header('Location: /si-akademik/public/mahasiswa');
-        exit;
+        $this->redirect('/si-akademik/public/mahasiswa');
     }
 }
